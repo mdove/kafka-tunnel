@@ -12,7 +12,7 @@ def cli():
 @cli.command(help='retrieve kafka/zookeeper ip\'s from AWS (important: a resource tag with Name=kafka/zookeeper is needed)')
 @click.argument('jump_host')
 @click.option('-zp','--zookeeper_port',default='2181')
-@click.option('-kp','--kafka_port',default='9092')
+@click.option('-kp','--kafka_port',default='9094')
 @click.option('-r','--region',default='ap-southeast-2')
 @click.option('-p','--profile',default='default')
 def aws(jump_host,zookeeper_port,kafka_port,region,profile):
@@ -30,7 +30,7 @@ def aws(jump_host,zookeeper_port,kafka_port,region,profile):
 @click.argument('kafka_ips')
 @click.argument('schemaregistry_ips',default='')
 @click.option('-zp','--zookeeper_port',default='2181')
-@click.option('-kp','--kafka_port',default='9092')
+@click.option('-kp','--kafka_port',default='9094')
 @click.option('-sp','--schemaregistry_port',default='8081')
 def manual(jump_host,zookeeper_ips, kafka_ips, schemaregistry_ips, zookeeper_port, kafka_port, schemaregistry_port):
     instances=[]
@@ -55,7 +55,7 @@ def add_local_interfaces(instances):
         if sys.platform == 'darwin':
             cmd = ['sudo', 'ifconfig', 'lo0', 'alias', instance.ip]
         else:
-            cmd = ['sudo', 'ip', 'add', 'a', 'dev', 'lo', instance.ip]
+            cmd = ['sudo', 'ip', 'addr', 'add', 'dev', 'lo', instance.ip]
         subprocess.call(cmd)
 
 def remove_local_interfaces(instances):
@@ -64,7 +64,7 @@ def remove_local_interfaces(instances):
         if sys.platform == 'darwin':
            cmd = ['sudo', 'ifconfig', 'lo0', '-alias', instance.ip]
         else:
-            cmd = ['sudo', 'ip', 'del', 'a', 'dev', 'lo', instance.ip]
+            cmd = ['sudo', 'ip', 'addr', 'delete', 'dev', 'lo', instance.ip]
         subprocess.call(cmd)
 
 def print_instances(instances):
